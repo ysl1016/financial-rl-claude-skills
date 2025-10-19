@@ -1,0 +1,277 @@
+# Symbol Mappings and Metadata
+# Defines trading symbols, their properties, and broker-specific mappings
+
+symbols:
+  # US Stocks
+  NVDA:
+    name: "NVIDIA Corporation"
+    market: "US"
+    exchange: "NASDAQ"
+    sector: "Technology"
+    currency: "USD"
+
+    # Broker-specific symbol mappings
+    broker_symbols:
+      kis: "NVDA"
+      ib: "NVDA"
+
+    # Trading parameters
+    lot_size: 1  # Minimum trading unit
+    tick_size: 0.01  # Minimum price increment
+    min_quantity: 1
+
+    # Risk parameters (overrides global settings if specified)
+    max_position_size: 0.25  # 25% of portfolio
+    stop_loss_percentage: 0.02  # 2%
+
+  PLTR:
+    name: "Palantir Technologies Inc."
+    market: "US"
+    exchange: "NYSE"
+    sector: "Technology"
+    currency: "USD"
+
+    broker_symbols:
+      kis: "PLTR"
+      ib: "PLTR"
+
+    lot_size: 1
+    tick_size: 0.01
+    min_quantity: 1
+
+    max_position_size: 0.25
+    stop_loss_percentage: 0.02
+
+  AAPL:
+    name: "Apple Inc."
+    market: "US"
+    exchange: "NASDAQ"
+    sector: "Technology"
+    currency: "USD"
+
+    broker_symbols:
+      kis: "AAPL"
+      ib: "AAPL"
+
+    lot_size: 1
+    tick_size: 0.01
+    min_quantity: 1
+
+    max_position_size: 0.30
+    stop_loss_percentage: 0.015  # 1.5% (less volatile)
+
+  TSLA:
+    name: "Tesla, Inc."
+    market: "US"
+    exchange: "NASDAQ"
+    sector: "Automotive"
+    currency: "USD"
+
+    broker_symbols:
+      kis: "TSLA"
+      ib: "TSLA"
+
+    lot_size: 1
+    tick_size: 0.01
+    min_quantity: 1
+
+    max_position_size: 0.20  # Lower due to high volatility
+    stop_loss_percentage: 0.03  # 3% (more volatile)
+
+  MSFT:
+    name: "Microsoft Corporation"
+    market: "US"
+    exchange: "NASDAQ"
+    sector: "Technology"
+    currency: "USD"
+
+    broker_symbols:
+      kis: "MSFT"
+      ib: "MSFT"
+
+    lot_size: 1
+    tick_size: 0.01
+    min_quantity: 1
+
+    max_position_size: 0.30
+    stop_loss_percentage: 0.015
+
+  GOOGL:
+    name: "Alphabet Inc. (Class A)"
+    market: "US"
+    exchange: "NASDAQ"
+    sector: "Technology"
+    currency: "USD"
+
+    broker_symbols:
+      kis: "GOOGL"
+      ib: "GOOGL"
+
+    lot_size: 1
+    tick_size: 0.01
+    min_quantity: 1
+
+    max_position_size: 0.30
+    stop_loss_percentage: 0.015
+
+  # Korean Stocks (Examples)
+  "005930":  # Samsung Electronics
+    name: "Samsung Electronics Co., Ltd."
+    market: "KR"
+    exchange: "KOSPI"
+    sector: "Technology"
+    currency: "KRW"
+
+    broker_symbols:
+      kis: "005930"
+      ib: null  # Not available on IB
+
+    lot_size: 1
+    tick_size: 100  # KRW 100
+    min_quantity: 1
+
+    max_position_size: 0.30
+    stop_loss_percentage: 0.02
+
+  "035420":  # NAVER Corporation
+    name: "NAVER Corporation"
+    market: "KR"
+    exchange: "KOSPI"
+    sector: "Technology"
+    currency: "KRW"
+
+    broker_symbols:
+      kis: "035420"
+      ib: null
+
+    lot_size: 1
+    tick_size: 100
+    min_quantity: 1
+
+    max_position_size: 0.25
+    stop_loss_percentage: 0.025
+
+# Watchlists
+watchlists:
+  # Tech stocks
+  tech:
+    - "NVDA"
+    - "PLTR"
+    - "AAPL"
+    - "MSFT"
+    - "GOOGL"
+    - "TSLA"
+
+  # Korean tech
+  korean_tech:
+    - "005930"  # Samsung
+    - "035420"  # NAVER
+
+  # High volatility (for experienced strategies)
+  high_volatility:
+    - "TSLA"
+    - "PLTR"
+    - "NVDA"
+
+  # Low volatility (for conservative strategies)
+  low_volatility:
+    - "AAPL"
+    - "MSFT"
+    - "GOOGL"
+
+# Market hours by exchange
+market_hours:
+  NASDAQ:
+    timezone: "America/New_York"
+    regular:
+      open: "09:30"
+      close: "16:00"
+    extended:
+      pre_market_open: "04:00"
+      pre_market_close: "09:30"
+      after_hours_open: "16:00"
+      after_hours_close: "20:00"
+
+  NYSE:
+    timezone: "America/New_York"
+    regular:
+      open: "09:30"
+      close: "16:00"
+    extended:
+      pre_market_open: "04:00"
+      pre_market_close: "09:30"
+      after_hours_open: "16:00"
+      after_hours_close: "20:00"
+
+  KOSPI:
+    timezone: "Asia/Seoul"
+    regular:
+      open: "09:00"
+      close: "15:30"
+    extended:
+      pre_market_open: "08:30"
+      pre_market_close: "09:00"
+      after_hours_open: "15:40"
+      after_hours_close: "16:00"
+
+  KOSDAQ:
+    timezone: "Asia/Seoul"
+    regular:
+      open: "09:00"
+      close: "15:30"
+    extended:
+      pre_market_open: "08:30"
+      pre_market_close: "09:00"
+      after_hours_open: "15:40"
+      after_hours_close: "16:00"
+
+# Currency conversion
+currencies:
+  USD:
+    symbol: "$"
+    decimal_places: 2
+
+  KRW:
+    symbol: "₩"
+    decimal_places: 0
+
+  # Conversion rates (should be updated real-time)
+  # These are fallback rates only
+  fallback_rates:
+    USD_TO_KRW: 1300
+    KRW_TO_USD: 0.00077
+
+# Sector classifications
+sectors:
+  Technology:
+    - "NVDA"
+    - "PLTR"
+    - "AAPL"
+    - "MSFT"
+    - "GOOGL"
+    - "005930"
+    - "035420"
+
+  Automotive:
+    - "TSLA"
+
+# Symbol validation
+validation:
+  # Allowed markets
+  allowed_markets:
+    - "US"
+    - "KR"
+
+  # Allowed exchanges
+  allowed_exchanges:
+    - "NASDAQ"
+    - "NYSE"
+    - "KOSPI"
+    - "KOSDAQ"
+
+  # Blacklist (do not trade)
+  blacklist: []
+
+  # Whitelist (only trade these if specified)
+  whitelist_enabled: false
+  whitelist: []

@@ -1,0 +1,253 @@
+# Trading Configuration
+# Core trading parameters and agent settings
+
+trading:
+  # Trading symbols
+  symbols:
+    - "NVDA"  # NVIDIA Corporation
+    - "PLTR"  # Palantir Technologies
+
+  # Trading schedule
+  schedule:
+    # Market hours (UTC)
+    market_open: "14:30"  # 9:30 AM EST
+    market_close: "21:00"  # 4:00 PM EST
+
+    # Pre/Post market trading
+    extended_hours: false
+
+    # Trading days (0=Monday, 6=Sunday)
+    trading_days: [0, 1, 2, 3, 4]  # Monday-Friday
+
+  # Decision update frequency
+  update_frequency: 5  # seconds between agent decisions
+
+  # Data collection frequency
+  data_frequency: 1  # seconds between data updates
+
+  # Claude consultation frequency
+  claude_consultation_frequency: 10  # agent decisions per Claude consultation
+
+  # Maximum positions
+  max_concurrent_positions: 5
+  max_position_per_symbol: 1
+
+# Agent Configuration
+agents:
+  # RL Agent settings
+  rl_agent:
+    type: "GRPO"  # Options: "GRPO", "DeepSeek"
+
+    # Model path (relative to project root)
+    model_path: "../models/grpo_trained.pth"
+
+    # Model parameters
+    state_dim: 50
+    action_dim: 3  # 0=hold, 1=buy, 2=sell
+
+    # Inference settings
+    device: "cpu"  # "cpu" or "cuda"
+    batch_size: 1
+
+    # Exploration
+    epsilon: 0.1  # Exploration rate (0.0-1.0)
+    epsilon_decay: 0.995
+    min_epsilon: 0.01
+
+  # DeepSeek Agent (if type="DeepSeek")
+  deepseek_agent:
+    model_path: "../models/deepseek_trained.pth"
+    history_length: 50  # Number of historical steps
+    transformer_layers: 6
+    attention_heads: 8
+
+  # Hybrid Agent settings (RL + Claude)
+  hybrid_agent:
+    enabled: true
+
+    # Decision mode
+    # "sequential": RL decides, then Claude validates
+    # "parallel": Both decide, then combine
+    # "claude_override": Claude can override RL decisions
+    decision_mode: "sequential"
+
+    # Weight distribution
+    rl_weight: 0.7
+    claude_weight: 0.3
+
+    # Claude override settings
+    enable_claude_override: true
+    override_threshold: 0.7  # Claude confidence threshold to override RL
+
+    # Risk assessment
+    risk_threshold: 0.7  # Don't trade if Claude risk > threshold
+
+  # Claude AI settings
+  claude:
+    model: "claude-sonnet-4"
+    max_tokens: 1000
+    temperature: 0.7
+
+    # Analysis prompts
+    market_analysis_prompt: |
+      Analyze the current market state for {symbol}:
+      - Current price: {current_price}
+      - Technical indicators: RSI={rsi}, MACD={macd}
+      - Recent trend: {trend}
+
+      Provide:
+      1. Market sentiment (BULLISH/BEARISH/NEUTRAL)
+      2. Risk level (LOW/MEDIUM/HIGH)
+      3. Recommendation (BUY/SELL/HOLD)
+      4. Brief reasoning (1-2 sentences)
+
+    # Rate limiting
+    max_requests_per_minute: 20
+    cache_results: true
+    cache_ttl: 300  # seconds
+
+# Data Processing
+data:
+  # Buffer settings
+  buffer_size: 100  # Number of data points to keep
+
+  # Technical indicators
+  indicators:
+    rsi:
+      enabled: true
+      period: 14
+
+    macd:
+      enabled: true
+      fast_period: 12
+      slow_period: 26
+      signal_period: 9
+
+    sma:
+      enabled: true
+      periods: [20, 50, 200]
+
+    bollinger_bands:
+      enabled: true
+      period: 20
+      std_dev: 2
+
+    volume:
+      enabled: true
+      ma_period: 20
+
+  # Data normalization
+  normalization:
+    enabled: true
+    method: "minmax"  # "minmax", "zscore", "robust"
+
+# Order Execution
+orders:
+  # Default order type
+  default_order_type: "market"  # "market", "limit", "stop"
+
+  # Market orders
+  market_orders:
+    enabled: true
+    slippage_tolerance: 0.001  # 0.1%
+
+  # Limit orders
+  limit_orders:
+    enabled: true
+    price_offset: 0.0005  # 0.05% from current price
+    timeout: 60  # seconds
+
+  # Stop orders
+  stop_orders:
+    enabled: true
+    trigger_offset: 0.02  # 2% stop-loss
+
+  # Order size
+  position_sizing:
+    method: "fixed"  # "fixed", "percentage", "kelly"
+    fixed_quantity: 100  # shares
+    percentage_of_capital: 0.10  # 10% of capital
+
+  # Order validation
+  validation:
+    check_buying_power: true
+    check_position_limits: true
+    check_risk_limits: true
+    min_order_value: 100  # USD
+
+# Performance Tracking
+performance:
+  # Metrics to track
+  metrics:
+    - "total_return"
+    - "sharpe_ratio"
+    - "max_drawdown"
+    - "win_rate"
+    - "profit_factor"
+    - "total_trades"
+
+  # Benchmarks
+  benchmark_symbol: "SPY"  # S&P 500 ETF
+
+  # Reporting frequency
+  report_frequency: "daily"  # "hourly", "daily", "weekly"
+
+  # Save reports to
+  report_path: "logs/performance_reports/"
+
+# Paper Trading
+paper_trading:
+  enabled: true
+  initial_cash: 100000  # USD
+
+  # Simulated execution
+  simulate_slippage: true
+  slippage_range: [0.0001, 0.001]  # 0.01% - 0.1%
+
+  simulate_commission: true
+  commission_per_share: 0.005  # USD
+
+  simulate_delays: true
+  execution_delay_range: [0.1, 1.0]  # seconds
+
+# Learning (Optional - for live learning)
+learning:
+  enabled: false  # Set to true to enable live learning
+
+  # Experience replay
+  replay_buffer_size: 10000
+  batch_size: 32
+
+  # Update frequency
+  update_every: 10  # steps
+  target_update_every: 100  # steps
+
+  # Learning rate
+  learning_rate: 0.0001
+  gamma: 0.99  # Discount factor
+
+  # Model checkpointing
+  save_model_every: 1000  # steps
+  checkpoint_path: "models/checkpoints/"
+
+# Logging
+logging:
+  level: "INFO"  # DEBUG, INFO, WARNING, ERROR, CRITICAL
+
+  # Log files
+  main_log: "logs/trading.log"
+  orders_log: "logs/orders.log"
+  performance_log: "logs/performance.log"
+  claude_log: "logs/claude_consultations.log"
+
+  # Log rotation
+  rotation:
+    enabled: true
+    max_bytes: 10485760  # 10 MB
+    backup_count: 5
+
+  # Console output
+  console:
+    enabled: true
+    level: "INFO"
+    colored: true

@@ -1,0 +1,134 @@
+# Broker Configuration
+# Manages settings for multiple broker integrations
+
+brokers:
+  # Korea Investment & Securities (한국투자증권)
+  kis:
+    enabled: true
+    name: "Korea Investment & Securities"
+
+    # Supported markets
+    markets:
+      - "KR"  # Korean stocks (KOSPI, KOSDAQ)
+      - "US"  # US stocks (NYSE, NASDAQ)
+      - "CN"  # Chinese stocks
+      - "JP"  # Japanese stocks
+
+    # API configuration
+    api_type: "REST + WebSocket"
+    base_url: "https://openapi.koreainvestment.com:9443"
+
+    # Credentials (from environment variables)
+    app_key: "${KIS_APP_KEY}"
+    app_secret: "${KIS_APP_SECRET}"
+    account_no: "${KIS_ACCOUNT_NO}"
+    environment: "${KIS_ENVIRONMENT}"  # virtual or real
+
+    # Connection settings
+    timeout: 10  # seconds
+    max_retries: 3
+    reconnect_delay: 5  # seconds
+
+    # Rate limits
+    rate_limit:
+      requests_per_second: 10
+      orders_per_minute: 100
+
+    # Features
+    features:
+      paper_trading: true
+      real_time_data: true
+      historical_data: true
+      order_execution: true
+      websocket_streaming: true
+
+  # Interactive Brokers
+  ib:
+    enabled: true
+    name: "Interactive Brokers"
+
+    # Supported markets
+    markets:
+      - "US"    # United States
+      - "EU"    # Europe
+      - "ASIA"  # Asia-Pacific
+      - "CA"    # Canada
+
+    # API configuration
+    api_type: "TWS API / IB Gateway"
+    host: "${IB_HOST}"
+    port: "${IB_PORT}"  # 7497=paper, 7496=live
+    client_id: "${IB_CLIENT_ID}"
+
+    # Connection settings
+    timeout: 10  # seconds
+    max_retries: 3
+    reconnect_delay: 5  # seconds
+
+    # TWS/Gateway settings
+    tws:
+      auto_start: false
+      path: null  # Path to TWS/Gateway executable (if auto_start=true)
+
+    # Rate limits
+    rate_limit:
+      requests_per_second: 50
+      orders_per_minute: 200
+
+    # Features
+    features:
+      paper_trading: true
+      real_time_data: true
+      historical_data: true
+      order_execution: true
+      options_trading: true
+      futures_trading: true
+      forex_trading: true
+
+# Broker routing strategy
+routing:
+  # Default broker selection logic
+  default_strategy: "auto"  # auto, low_latency, low_fees, balanced
+
+  # Symbol-based routing rules
+  rules:
+    # Korean stocks → KIS only
+    - symbols: ["^[0-9]{6}$"]  # 6-digit Korean stock codes
+      broker: "kis"
+      reason: "Only KIS supports Korean market"
+
+    # US stocks → Auto-select based on strategy
+    - symbols: ["NVDA", "PLTR", "AAPL", "TSLA", "MSFT", "GOOGL"]
+      broker: "auto"
+      strategy: "low_latency"  # Prefer KIS for US stocks (lower latency from Korea)
+
+    # Options/Futures → IB only
+    - symbols: [".*OPT$", ".*FUT$"]  # Symbols ending with OPT or FUT
+      broker: "ib"
+      reason: "IB has better derivatives support"
+
+  # Fallback broker if primary fails
+  fallback:
+    enabled: true
+    max_attempts: 2
+
+# Health check settings
+health_check:
+  enabled: true
+  interval: 60  # seconds
+  timeout: 5  # seconds
+
+  # Actions on health check failure
+  on_failure:
+    log: true
+    alert: true
+    reconnect: true
+    max_reconnect_attempts: 3
+
+# Logging
+logging:
+  log_connections: true
+  log_disconnections: true
+  log_orders: true
+  log_data_streams: false  # Set to true for debugging (high volume)
+  log_level: "INFO"  # DEBUG, INFO, WARNING, ERROR, CRITICAL

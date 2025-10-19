@@ -1,0 +1,261 @@
+# Risk Management Configuration
+# Critical safety limits and risk controls
+
+# Daily Limits
+daily_limits:
+  # Maximum daily loss (as fraction of capital)
+  # Trading stops if daily loss exceeds this limit
+  max_daily_loss: 0.05  # 5% of capital
+
+  # Maximum daily profit (optional - for profit taking)
+  max_daily_profit: 0.10  # 10% of capital (optional, set to null to disable)
+
+  # Maximum number of trades per day
+  max_daily_trades: 100
+
+  # Maximum number of losing trades before pause
+  max_consecutive_losses: 5
+
+  # Cool-down period after hitting limits (minutes)
+  cooldown_period: 60
+
+# Position Limits
+position_limits:
+  # Maximum position size per symbol (as fraction of portfolio)
+  max_position_size: 0.30  # 30% of portfolio value
+
+  # Minimum position size (USD)
+  min_position_size: 100
+
+  # Maximum number of concurrent positions
+  max_concurrent_positions: 10
+
+  # Maximum concentration in single sector (optional)
+  max_sector_concentration: 0.50  # 50%
+
+  # Maximum leverage
+  max_leverage: 1.0  # 1.0 = no leverage, 2.0 = 2x leverage
+
+# Stop-Loss Settings
+stop_loss:
+  # Global stop-loss (applies to all positions)
+  enabled: true
+
+  # Stop-loss percentage per position
+  percentage: 0.02  # 2% loss triggers stop-loss
+
+  # Trailing stop-loss
+  trailing:
+    enabled: true
+    percentage: 0.03  # 3% trailing
+
+  # Time-based stop-loss
+  time_based:
+    enabled: false
+    max_holding_period: 86400  # seconds (24 hours)
+
+  # Stop-loss order type
+  order_type: "market"  # "market" or "limit"
+
+# Take-Profit Settings
+take_profit:
+  # Global take-profit
+  enabled: true
+
+  # Take-profit percentage per position
+  percentage: 0.05  # 5% profit triggers take-profit
+
+  # Partial take-profit (sell portion of position)
+  partial:
+    enabled: true
+    first_target: 0.03  # 3% profit
+    sell_percentage: 0.50  # Sell 50% of position
+
+# Emergency Shutdown
+emergency:
+  # Total portfolio loss limit (shutdown system)
+  max_total_loss: 0.10  # 10% of initial capital
+
+  # Actions on emergency
+  actions:
+    close_all_positions: true
+    cancel_all_orders: true
+    disconnect_brokers: true
+    send_alert: true
+    lock_trading: true  # Prevent restart without manual intervention
+
+  # Auto-recovery
+  auto_recovery:
+    enabled: false
+    wait_period: 3600  # seconds (1 hour)
+
+# Drawdown Controls
+drawdown:
+  # Maximum drawdown from peak
+  max_drawdown: 0.15  # 15% drawdown from peak
+
+  # Action on max drawdown
+  on_max_drawdown:
+    reduce_position_size: true
+    reduction_factor: 0.5  # Reduce to 50% of normal size
+    pause_trading: false
+
+  # Recovery period before resuming normal size
+  recovery_period: 7200  # seconds (2 hours)
+
+# Volatility Controls
+volatility:
+  # Adjust position size based on volatility
+  adaptive_sizing: true
+
+  # Maximum volatility threshold
+  # Don't trade symbols with volatility > threshold
+  max_volatility: 0.05  # 5% intraday volatility
+
+  # Increase margin during high volatility
+  high_volatility_margin: 1.5  # 1.5x normal margin
+
+# Correlation Controls
+correlation:
+  # Maximum correlation between positions
+  max_correlation: 0.7  # Don't hold highly correlated positions
+
+  # Correlation check enabled
+  enabled: false  # Set to true to enable
+
+# Order Rate Limiting
+rate_limiting:
+  # Maximum orders per minute
+  max_orders_per_minute: 20
+
+  # Maximum order value per minute
+  max_order_value_per_minute: 50000  # USD
+
+  # Delay between orders (seconds)
+  min_order_interval: 1
+
+# Risk Scoring
+risk_scoring:
+  # Enable risk scoring for each trade
+  enabled: true
+
+  # Maximum risk score (0-100, higher = riskier)
+  max_risk_score: 70
+
+  # Risk factors and weights
+  factors:
+    volatility: 0.3
+    position_size: 0.2
+    drawdown: 0.2
+    market_conditions: 0.15
+    claude_assessment: 0.15
+
+# Market Conditions
+market_conditions:
+  # Don't trade during extreme market conditions
+  check_market_hours: true
+  check_circuit_breakers: true
+  check_news_events: false  # Requires external news API
+
+  # VIX threshold (if VIX > threshold, reduce trading)
+  vix_threshold: 30
+
+  # Action on high VIX
+  on_high_vix:
+    reduce_position_size: true
+    reduction_factor: 0.5
+    increase_stop_loss: true
+
+# Account Protection
+account:
+  # Minimum account balance to continue trading
+  min_balance: 10000  # USD
+
+  # Reserve cash (don't use for trading)
+  reserve_cash: 5000  # USD
+
+  # Maximum buying power usage
+  max_buying_power_usage: 0.90  # 90%
+
+# Claude AI Risk Assessment
+claude_risk:
+  # Use Claude for risk assessment
+  enabled: true
+
+  # Don't trade if Claude risk level is above threshold
+  max_risk_level: "MEDIUM"  # LOW, MEDIUM, HIGH
+
+  # Require Claude approval for high-value trades
+  require_approval_above: 10000  # USD
+
+  # Claude assessment cache
+  cache_duration: 300  # seconds (5 minutes)
+
+# Alerts
+alerts:
+  # Slack notifications
+  slack:
+    enabled: true
+    webhook_url: "${SLACK_WEBHOOK_URL}"
+
+    # Alert levels to send
+    levels:
+      - "WARNING"
+      - "ERROR"
+      - "CRITICAL"
+
+    # Alert conditions
+    conditions:
+      daily_loss_50pct: true      # 50% of daily loss limit
+      daily_loss_75pct: true      # 75% of daily loss limit
+      daily_loss_100pct: true     # Hit daily loss limit
+      position_stop_loss: true    # Position stopped out
+      emergency_shutdown: true    # Emergency shutdown triggered
+      max_drawdown_warning: true  # Approaching max drawdown
+      high_volatility: true       # High volatility detected
+
+  # Email notifications
+  email:
+    enabled: false
+    smtp_server: "${SMTP_SERVER}"
+    smtp_port: "${SMTP_PORT}"
+    from_email: "${SMTP_USERNAME}"
+    to_email: "${ALERT_EMAIL_TO}"
+
+    # Same alert levels and conditions as Slack
+    levels:
+      - "ERROR"
+      - "CRITICAL"
+
+# Logging
+logging:
+  # Log all risk checks
+  log_risk_checks: true
+
+  # Log all limit violations
+  log_violations: true
+
+  # Log file
+  risk_log_file: "logs/risk_management.log"
+
+# Testing Mode
+testing:
+  # Disable risk limits for testing (DANGEROUS!)
+  disable_limits: false
+
+  # Reduce limits for testing
+  reduce_limits: false
+  reduction_factor: 0.1  # 10% of normal limits
+
+# Compliance
+compliance:
+  # Pattern Day Trader (PDT) rule
+  pdt_protection: true
+  max_day_trades_per_week: 3  # For accounts < $25K
+
+  # Wash sale rule
+  wash_sale_protection: false  # Set to true to enable
+
+  # Record keeping
+  keep_audit_trail: true
+  audit_trail_path: "logs/audit/"
