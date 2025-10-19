@@ -1,0 +1,49 @@
+{
+    "mcpServers": {
+        "filesystem": {
+            "type": "stdio",
+            "command": "npx",
+            "args": [
+                "@modelcontextprotocol/server-filesystem",
+                "/mnt/d/drbreakfast"
+            ],
+            "env": {}
+        },
+        "github": {
+            "type": "stdio",
+            "command": "npx",
+            "args": [
+                "@modelcontextprotocol/server-github"
+            ],
+            "env": {
+                "GITHUB_PERSONAL_ACCESS_TOKEN": "YOUR_GITHUB_TOKEN_HERE"
+            }
+        },
+        "sequential-thinking": {
+            "type": "stdio",
+            "command": "npx",
+            "args": [
+                "@modelcontextprotocol/server-sequential-thinking"
+            ],
+            "env": {}
+        },
+        "brave-search": {
+            "type": "stdio",
+            "command": "npx",
+            "args": [
+                "@modelcontextprotocol/server-brave-search"
+            ],
+            "env": {
+                "BRAVE_API_KEY": "YOUR_BRAVE_API_KEY_HERE"
+            }
+        },
+        "Context7": {
+            "type": "stdio",
+            "command": "npx",
+            "args": [
+                "@upstash/context7-mcp"
+            ],
+            "env": {}
+        }
+    }
+}

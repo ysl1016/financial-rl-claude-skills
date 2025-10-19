@@ -1,9 +1,10 @@
-# Financial RL Trading Model
+# Financial RL Trading Model with Claude Skills
 
-This repository contains a Reinforcement Learning based Financial Trading Model implemented in Python. The model uses various technical indicators and a custom gym environment to train an RL agent for trading decisions.
+This repository contains a Reinforcement Learning based Financial Trading Model with integrated Claude AI capabilities. The project combines traditional RL trading with advanced AI analysis and professional investment reporting.
 
-## Features
+## Key Features
 
+### Trading & RL Capabilities
 * Custom OpenAI Gym environment for trading
 * Multiple technical indicators implementation
 * Risk management with stop-loss
@@ -15,6 +16,13 @@ This repository contains a Reinforcement Learning based Financial Trading Model 
 * Benchmarking framework for strategy comparison
 * DeepSeek-R1 transformer-based model integration
 
+### Claude AI Integration 🆕
+* **Claude Skills**: Natural language investment report generation
+* **AI-Powered Analysis**: Market sentiment and trend analysis using Claude 3.7 Sonnet
+* **Professional Reporting**: Institutional-grade investment reports
+* **Advanced Charting**: 4 types of high-resolution charts (300 DPI)
+* **Dual Interface**: Both conversational (Skills) and programmatic (Python API) access
+
 ## Installation
 
 ```bash
@@ -24,24 +32,119 @@ pip install -r requirements.txt
 ## Package Structure
 
 ```
-financial-rl-trading/
-├── src/
-│   ├── data/           # Data processing modules
-│   ├── models/         # Trading environment and RL agents
-│   ├── utils/          # Utility functions and analysis tools
-│   └── tests/          # Testing framework
-├── examples/           # Example scripts
-├── docs/               # Documentation
-├── TESTING_GUIDE.md    # Guide for testing and optimization
-└── requirements.txt
+financial-rl-claude-skills/
+├── .claude/skills/trading-analysis/  # 🆕 Claude Skills integration
+│   ├── SKILL.md                      # Skill definition
+│   ├── reference.md                  # Technical reference
+│   ├── examples.md                   # Usage examples
+│   └── scripts/                      # Execution wrapper
+│
+├── docs/                             # 📚 Documentation (organized)
+│   ├── guides/                       # User guides
+│   │   ├── QUICKSTART.md
+│   │   ├── CLAUDE_INTEGRATION_GUIDE.md
+│   │   ├── CLAUDE_SKILLS_INTEGRATION.md
+│   │   └── TESTING_GUIDE.md
+│   ├── reports/                      # Technical reports
+│   ├── architecture/                 # Architecture docs
+│   ├── api/                          # API documentation
+│   └── security/                     # Security guidelines
+│
+├── scripts/                          # 🔧 Executable scripts
+│   ├── reports/                      # Report generation
+│   │   └── generate_investment_report.py
+│   └── utils/                        # Utility scripts
+│
+├── src/                              # 💻 Source code
+│   ├── api/                          # REST API
+│   ├── claude_integration/           # 🆕 Claude AI integration
+│   ├── data/                         # Data processing
+│   ├── deployment/                   # Model deployment
+│   ├── models/                       # RL agents & environments
+│   ├── monitoring/                   # Performance monitoring
+│   ├── reporting/                    # 🆕 Report generation
+│   └── utils/                        # Utilities
+│
+├── tests/                            # ✅ Unit & integration tests
+│   ├── unit/                         # Unit tests
+│   ├── integration/                  # Integration tests
+│   └── run_tests.py
+│
+├── examples/                         # 📝 Example scripts
+├── reports/                          # 📊 Generated investment reports
+├── monitoring/                       # 📈 Monitoring configs
+├── .env.example
+├── requirements.txt
+└── README.md
 ```
 
 ## Documentation
 
-* [API Documentation](docs/api_documentation.md) - Detailed API usage guide for all components
-* [Testing Guide](TESTING_GUIDE.md) - Guide for testing and optimization
+### Quick Start Guides
+* **🆕 [Quick Start](docs/guides/QUICKSTART.md)** - Get started in 5 minutes
+* **🆕 [Claude Skills Integration](docs/guides/CLAUDE_SKILLS_INTEGRATION.md)** - Natural language report generation
+* [Claude Integration Guide](docs/guides/CLAUDE_INTEGRATION_GUIDE.md) - Hybrid RL-Claude trading
+* [Testing Guide](docs/guides/TESTING_GUIDE.md) - Guide for testing and optimization
 
-## Basic Usage
+### Technical Documentation
+* [API Documentation](docs/api/api_documentation.md) - Detailed API reference
+* [Architecture Overview](docs/architecture/DeepSeek-R1_Financial_Trading_Model_Architecture.md) - System architecture
+* [Security Guidelines](docs/security/SECURITY.md) - Security best practices
+
+### Reports & Summaries
+* **🆕 [Investment Report Summary](docs/reports/INVESTMENT_REPORT_SUMMARY.md)** - Report system overview
+* [Project Reorganization Plan](PROJECT_REORGANIZATION_PLAN.md) - Structure improvements
+
+## Quick Start
+
+### 🆕 Using Claude Skills (Natural Language)
+
+The easiest way to generate investment reports is through natural language in Claude Code:
+
+```
+"Generate an investment report for SPY"
+"Analyze AAPL and create a professional report"
+"Compare QQQ and SPY - which should I invest in?"
+```
+
+Claude automatically discovers and uses the `trading-analysis` skill to generate comprehensive reports with:
+- Real-time market data from Yahoo Finance
+- 10+ technical indicators (RSI, MACD, Moving Averages, etc.)
+- Claude AI market analysis and sentiment
+- 4 high-resolution charts (300 DPI)
+- Institutional-grade markdown reports
+- Investment recommendations with entry/exit criteria
+
+**See [Claude Skills Integration Guide](docs/guides/CLAUDE_SKILLS_INTEGRATION.md) for detailed examples.**
+
+### 🆕 Using Python API (Programmatic)
+
+Generate reports programmatically for automation:
+
+```bash
+# Generate investment report for SPY
+python3 scripts/reports/generate_investment_report.py --symbol SPY --client "Acme Capital"
+
+# Custom title
+python3 scripts/reports/generate_investment_report.py --symbol AAPL --title "Q4 2025 AAPL Analysis"
+```
+
+Or use in your Python code:
+
+```python
+import sys
+sys.path.insert(0, 'scripts/reports')
+from generate_investment_report import generate_complete_report
+
+success = generate_complete_report(
+    symbol='SPY',
+    client_name='Institutional Investors',
+    report_title='SPY Market Analysis'
+)
+# Generates reports in reports/ directory
+```
+
+## Traditional RL Trading Usage
 
 ### Data Processing
 
@@ -157,7 +260,7 @@ The project includes comprehensive testing and optimization tools:
 
 ```bash
 # Run all tests
-python src/tests/run_tests.py --type all
+python tests/run_tests.py --type all
 
 # Optimize hyperparameters
 python examples/optimize_and_benchmark.py --symbol SPY --optimize --n_iter 30
@@ -166,7 +269,7 @@ python examples/optimize_and_benchmark.py --symbol SPY --optimize --n_iter 30
 python examples/optimize_and_benchmark.py --symbol SPY --benchmark
 ```
 
-For detailed information on testing and optimization, see [TESTING_GUIDE.md](TESTING_GUIDE.md).
+For detailed information on testing and optimization, see [Testing Guide](docs/guides/TESTING_GUIDE.md).
 
 ### Hyperparameter Optimization
 

@@ -1,0 +1,359 @@
+# Financial RL Trading - Git Ignore File
+
+# ============================================================================
+# SECURITY - NEVER COMMIT THESE FILES
+# ============================================================================
+.env
+.env.local
+.env.*.local
+*.key
+*.pem
+*.p12
+credentials.json
+secrets.json
+api_keys.txt
+
+# API Keys and Tokens
+**/ANTHROPIC_API_KEY*
+**/API_KEY*
+**/SECRET_KEY*
+
+# Claude Code MCP Configuration (contains sensitive tokens)
+.claude/mcp.json
+
+# ============================================================================
+# Python
+# ============================================================================
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+
+# Translations
+*.mo
+*.pot
+
+# Django stuff:
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+
+# Flask stuff:
+instance/
+.webassets-cache
+
+# Scrapy stuff:
+.scrapy
+
+# Sphinx documentation
+docs/_build/
+
+# PyBuilder
+target/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+*.ipynb
+
+# IPython
+profile_default/
+ipython_config.py
+
+# pyenv
+.python-version
+
+# pipenv
+Pipfile.lock
+
+# PEP 582
+__pypackages__/
+
+# Celery stuff
+celerybeat-schedule
+celerybeat.pid
+
+# SageMath parsed files
+*.sage.py
+
+# Environments
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Spyder project settings
+.spyderproject
+.spyproject
+
+# Rope project settings
+.ropeproject
+
+# mkdocs documentation
+/site
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pyre type checker
+.pyre/
+
+# ============================================================================
+# Machine Learning / Deep Learning
+# ============================================================================
+# Model files
+*.pt
+*.pth
+*.h5
+*.hdf5
+*.ckpt
+*.pb
+*.onnx
+*.tflite
+models/
+checkpoints/
+saved_models/
+
+# TensorBoard logs
+runs/
+tensorboard_logs/
+logs/
+*.tfevents.*
+
+# Training artifacts
+wandb/
+mlruns/
+outputs/
+
+# Data files
+data/
+datasets/
+*.csv
+*.tsv
+*.json
+*.pkl
+*.pickle
+*.npy
+*.npz
+
+# Exception: Keep example data
+!examples/data/
+!docs/data/
+
+# ============================================================================
+# Trading Specific
+# ============================================================================
+# Trading logs
+trading_logs/
+backtest_results/
+portfolio_history/
+trade_history/
+
+# Generated reports
+reports/
+*.pdf
+*.xlsx
+
+# Temporary trading data
+temp_data/
+cache/
+.cache/
+
+# Decision logs (may contain sensitive info)
+hybrid_decisions_*.json
+decision_logs/
+
+# Training results
+hybrid_training_*.png
+training_results/
+optimization_results/
+
+# Saved models (can be large)
+grpo_model_*.pt
+hybrid_model_*.pt
+deepseek_model_*.pt
+
+# Performance logs
+performance_*.log
+metrics_*.json
+
+# ============================================================================
+# IDE / Editor
+# ============================================================================
+# VSCode
+.vscode/
+*.code-workspace
+
+# PyCharm
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# Vim
+*.swp
+*.swo
+*~
+
+# Emacs
+*~
+\#*\#
+/.emacs.desktop
+/.emacs.desktop.lock
+*.elc
+
+# ============================================================================
+# Operating System
+# ============================================================================
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+._*
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+*.stackdump
+[Dd]esktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
+*.lnk
+
+# Linux
+*~
+.directory
+.Trash-*
+.nfs*
+
+# ============================================================================
+# Docker
+# ============================================================================
+*.tar
+*.zip
+*.gz
+docker-compose.override.yml
+
+# ============================================================================
+# Misc
+# ============================================================================
+# Backup files
+*.bak
+*.backup
+*.old
+*.orig
+*.tmp
+
+# Archive files
+*.7z
+*.dmg
+*.iso
+*.jar
+*.rar
+*.tar
+*.zip
+
+# Compressed files
+*.gz
+*.bz2
+*.xz
+
+# Package files
+*.deb
+*.rpm
+
+# ============================================================================
+# Keep These Files (Whitelist)
+# ============================================================================
+# Example and template files
+!.env.example
+!config.example.json
+!settings.example.yaml
+!.claude/mcp.json.example
+
+# Documentation
+!README.md
+!QUICKSTART.md
+!*.md
+
+# Requirements
+!requirements.txt
+!setup.py
+!pyproject.toml
+
+# Configuration templates
+!**/config.template.*
+!**/settings.template.*
