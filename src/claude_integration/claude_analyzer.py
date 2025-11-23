@@ -266,7 +266,7 @@ Provide detailed reasoning based on the technical indicators and price action.""
             print(f"Claude API error: {e}")
             raise
 
-    def _parse_analysis_response(self, response: str) -> Dict[str, Any]:
+    def _parse_analysis_response(self, response: str, required_fields: Optional[List[str]] = None) -> Dict[str, Any]:
         """Claude 응답 파싱"""
         try:
             # JSON 블록 추출 시도
@@ -284,7 +284,9 @@ Provide detailed reasoning based on the technical indicators and price action.""
             analysis = json.loads(json_str)
 
             # 필수 필드 검증
-            required_fields = ['market_sentiment', 'confidence_level', 'trading_recommendation']
+            if required_fields is None:
+                required_fields = ['market_sentiment', 'confidence_level', 'trading_recommendation']
+            
             for field in required_fields:
                 if field not in analysis:
                     raise ValueError(f"Missing required field: {field}")
@@ -405,7 +407,7 @@ Format response as JSON:
 
         try:
             response = self._call_claude(prompt)
-            return self._parse_analysis_response(response)
+            return self._parse_analysis_response(response, required_fields=['pattern_identified', 'reliability'])
         except Exception as e:
             return {
                 'pattern_identified': 'unknown',

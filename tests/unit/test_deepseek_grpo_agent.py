@@ -53,7 +53,8 @@ class TestDeepSeekGRPOAgent(unittest.TestCase):
             num_heads=4,
             num_layers=2,
             dropout=0.1,
-            max_seq_length=seq_length
+            dropout=0.1,
+            max_len=seq_length
         )
         
         # 순전파
@@ -220,17 +221,16 @@ class TestDeepSeekGRPOAgent(unittest.TestCase):
             state_dim=self.state_dim,
             action_dim=self.action_dim,
             seq_length=self.seq_length,
-            feature_dim=self.feature_dim,
             hidden_dim=self.hidden_dim,
             device='cpu'  # CPU로 테스트
         )
         
         # 주요 구성 요소 확인
-        self.assertIsInstance(agent.temporal_encoder, TemporalEncoder)
-        self.assertIsInstance(agent.feature_attention, FeatureAttention)
-        self.assertIsInstance(agent.policy_network, DeepSeekPolicyNetwork)
-        self.assertIsInstance(agent.value_network, DistributionalValueNetwork)
-        self.assertIsInstance(agent.meta_controller, MetaController)
+        self.assertIsInstance(agent.network.temporal_encoder, TemporalEncoder)
+        self.assertIsInstance(agent.network.feature_attention, FeatureAttention)
+        self.assertIsInstance(agent.network.policy_network, DeepSeekPolicyNetwork)
+        self.assertIsInstance(agent.network.value_network, DistributionalValueNetwork)
+        self.assertIsInstance(agent.network.meta_controller, MetaController)
         self.assertIsInstance(agent.optimizer, torch.optim.Adam)
         
         # 하이퍼파라미터 확인
@@ -247,7 +247,6 @@ class TestDeepSeekGRPOAgent(unittest.TestCase):
             state_dim=self.state_dim,
             action_dim=self.action_dim,
             seq_length=self.seq_length,
-            feature_dim=self.feature_dim,
             hidden_dim=self.hidden_dim,
             device='cpu'  # CPU로 테스트
         )
@@ -283,7 +282,6 @@ class TestDeepSeekGRPOAgent(unittest.TestCase):
             state_dim=self.state_dim,
             action_dim=self.action_dim,
             seq_length=self.seq_length,
-            feature_dim=self.feature_dim,
             hidden_dim=self.hidden_dim,
             device='cpu'  # CPU로 테스트
         )
@@ -328,7 +326,6 @@ class TestDeepSeekGRPOAgent(unittest.TestCase):
             state_dim=self.state_dim,
             action_dim=self.action_dim,
             seq_length=self.seq_length,
-            feature_dim=self.feature_dim,
             hidden_dim=self.hidden_dim,
             device='cpu'  # CPU로 테스트
         )
@@ -347,7 +344,6 @@ class TestDeepSeekGRPOAgent(unittest.TestCase):
             state_dim=self.state_dim,
             action_dim=self.action_dim,
             seq_length=self.seq_length,
-            feature_dim=self.feature_dim,
             hidden_dim=self.hidden_dim,
             device='cpu'  # CPU로 테스트
         )
@@ -356,7 +352,7 @@ class TestDeepSeekGRPOAgent(unittest.TestCase):
         new_agent.load(save_path)
         
         # 성공적인 로드 확인 (모델 구조 비교)
-        for param1, param2 in zip(agent.temporal_encoder.parameters(), new_agent.temporal_encoder.parameters()):
+        for param1, param2 in zip(agent.network.temporal_encoder.parameters(), new_agent.network.temporal_encoder.parameters()):
             self.assertTrue(torch.equal(param1, param2))
     
     def test_update_empty_buffer(self):
@@ -366,7 +362,6 @@ class TestDeepSeekGRPOAgent(unittest.TestCase):
             state_dim=self.state_dim,
             action_dim=self.action_dim,
             seq_length=self.seq_length,
-            feature_dim=self.feature_dim,
             hidden_dim=self.hidden_dim,
             device='cpu'  # CPU로 테스트
         )
@@ -391,7 +386,6 @@ class TestDeepSeekGRPOAgent(unittest.TestCase):
             state_dim=mini_state_dim,
             action_dim=mini_action_dim,
             seq_length=mini_seq_length,
-            feature_dim=mini_feature_dim,
             hidden_dim=mini_hidden_dim,
             device='cpu'  # CPU로 테스트
         )
@@ -412,7 +406,7 @@ class TestDeepSeekGRPOAgent(unittest.TestCase):
             agent.store_transition(state, action, reward, next_state, done, history)
         
         # 업데이트 수행
-        metrics = agent.update(epochs=1, batch_size=4)
+        metrics = agent.update(batch_size=4)
         
         # 결과 확인
         self.assertIn('policy_loss', metrics)
@@ -436,7 +430,6 @@ class TestDeepSeekGRPOAgent(unittest.TestCase):
             state_dim=self.state_dim,
             action_dim=self.action_dim,
             seq_length=self.seq_length,
-            feature_dim=self.feature_dim,
             hidden_dim=self.hidden_dim,
             device='cpu'  # CPU로 테스트
         )
